@@ -5,7 +5,6 @@
 #include <fstream>
 #include <string>
 #include <sstream>
-#include "Main.h"
 
 #define ASSERT(x) if (!(x)) __debugbreak();
 

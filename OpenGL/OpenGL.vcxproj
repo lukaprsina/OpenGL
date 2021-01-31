@@ -24,9 +24,6 @@
   <ItemGroup>
     <None Include="res\shaders\Basic.shader" />
   </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="src\Main.h" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
