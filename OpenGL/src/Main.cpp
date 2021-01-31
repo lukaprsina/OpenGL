@@ -7,6 +7,28 @@
 #include <sstream>
 #include "Main.h"
 
+#define ASSERT(x) if (!(x)) __debugbreak();
+
+#define GLCall(x) GLClearError();\
+    x;\
+    ASSERT(GLLogCall(#x, __FILE__, __LINE__))
+
+static void GLClearError()
+{
+    while (glGetError() != GL_NO_ERROR);
+}
+
+static bool GLLogCall(const char* function, const char* file, int line)
+{
+    while (GLenum error = glGetError())
+    {
+        std::cout << "[OpenGL error] (" << error << "): " << function << " " <<
+            file << ":" << line << '\n';
+        return false;
+    }
+    return true;
+}
+
 struct ShaderProgramSource
 {
     std::string VertexSource;
@@ -67,8 +89,8 @@ static unsigned int CompileShader(unsigned int type, const std::string& source)
         char* message = (char*)_malloca(length * sizeof(char));
 
         glGetShaderInfoLog(id, length, &length, message);
-        std::cout << "Failed to compile "
-            << (type == GL_VERTEX_SHADER ? "vertex" : "fragment") << ".\n";
+        std::cout << "Failed to compile " <<
+            (type == GL_VERTEX_SHADER ? "vertex" : "fragment") << ".\n";
         std::cout << message << '\n';
 
         glDeleteShader(id);
@@ -158,7 +180,7 @@ int main(void)
         /* Render here */
         glClear(GL_COLOR_BUFFER_BIT);
 
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+        GLCall(glDrawElements(GL_TRIANGLES, 6, GL_INT, nullptr));
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
