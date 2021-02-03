@@ -15,35 +15,19 @@ struct VertexBufferElement
 class VertexBufferLayout
 {
 public:
-	VertexBufferLayout()
-		: m_Stride(0) {}
+	VertexBufferLayout();
 
 	template<typename T>
-	void Push(unsigned int count)
-	{
-		static_assert(false);
-	}
+	void Push(unsigned int count);
 
 	template<>
-	void Push<float>(unsigned int count)
-	{
-		m_Elements.push_back({ GL_FLOAT, count, GL_FALSE });
-		m_Stride += count * VertexBufferElement::GetSizeOfType(GL_FLOAT);
-	}
+	void Push<float>(unsigned int count);
 
 	template<>
-	void Push<unsigned int>(unsigned int count)
-	{
-		m_Elements.push_back({ GL_UNSIGNED_INT, count, GL_FALSE });
-		m_Stride += count * VertexBufferElement::GetSizeOfType(GL_UNSIGNED_INT);
-	}
+	void Push<unsigned int>(unsigned int count);
 
 	template<>
-	void Push<unsigned char>(unsigned int count)
-	{
-		m_Elements.push_back({ GL_UNSIGNED_BYTE, count, GL_TRUE });
-		m_Stride += count * VertexBufferElement::GetSizeOfType(GL_UNSIGNED_BYTE);
-	}
+	void Push<unsigned char>(unsigned int count);
 
 	inline const std::vector<VertexBufferElement> GetElements() const { return m_Elements; }
 
