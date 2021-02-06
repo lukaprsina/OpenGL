@@ -24,18 +24,18 @@ namespace test {
 		TestMenu(Test*& currentTestPointer);
 		~TestMenu();	
 
-		const char* GetName() override { return "Testing Framework"; };
+		inline const char* GetName() override { return "Testing Framework"; };
 
 		void OnImGuiRender() override;
 
 		template<typename T>
-		void RegisterTest(const std::string& name)
+		void RegisterTest(const char* name)
 		{
 			std::cout << "Registering test " << name << '\n';
-			m_Tests.push_back(std::make_pair(name, []() { return new T(); }));
+			m_Tests.push_back(std::make_pair(name, [name]() { return new T(name); }));
 		}
 
-	private:		
+	private:
 		Test*& m_CurrentTest;
 		std::vector<std::pair<std::string, std::function<Test* ()>>> m_Tests;
 	};

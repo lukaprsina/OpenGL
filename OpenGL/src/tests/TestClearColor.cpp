@@ -3,8 +3,8 @@
 #include "imgui/imgui.h"
 
 namespace test {
-	TestClearColor::TestClearColor()
-		: m_ClearColor{ 0.2f, 0.3f, 0.8f, 1.0f }
+	TestClearColor::TestClearColor(const char* name)
+		: m_ClearColor{ 0.2f, 0.3f, 0.8f, 1.0f }, m_Name(name)
 	{
 	}
 
