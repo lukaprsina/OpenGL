@@ -10,6 +10,8 @@ namespace test {
 		TestClearColor();
 		~TestClearColor();
 
+		const char* GetName() { return "Clear Color Test"; };
+
 		void OnUpdate(float deltaTime) override;
 		void OnRender() override;
 		void OnImGuiRender() override;
