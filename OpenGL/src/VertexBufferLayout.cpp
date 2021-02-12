@@ -6,6 +6,7 @@ unsigned int VertexBufferElement::GetSizeOfType(unsigned int type)
 	switch (type)
 	{
 	case GL_FLOAT:         return 4;
+	case GL_DOUBLE:         return 4;
 	case GL_UNSIGNED_INT:  return 4;
 	case GL_UNSIGNED_BYTE: return 1;
 	}
@@ -21,6 +22,12 @@ void VertexBufferLayout::Push<float>(unsigned int count)
 {
 	m_Elements.push_back({ GL_FLOAT, count, GL_FALSE });
 	m_Stride += count * VertexBufferElement::GetSizeOfType(GL_FLOAT);
+}
+template<>
+void VertexBufferLayout::Push<double>(unsigned int count)
+{
+	m_Elements.push_back({ GL_DOUBLE, count, GL_FALSE });
+	m_Stride += count * VertexBufferElement::GetSizeOfType(GL_DOUBLE);
 }
 
 template<>

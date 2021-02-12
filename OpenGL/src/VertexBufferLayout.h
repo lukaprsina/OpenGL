@@ -24,6 +24,9 @@ public:
 	void Push<float>(unsigned int count);
 
 	template<>
+	void Push<double>(unsigned int count);
+
+	template<>
 	void Push<unsigned int>(unsigned int count);
 
 	template<>

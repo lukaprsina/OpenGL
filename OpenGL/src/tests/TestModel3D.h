@@ -21,7 +21,7 @@ namespace test {
 
 		bool LoadFromObjectFile(
 			const char* filename,
-			std::vector<double>& vertices,
+			std::vector<std::array<float, 3>>& vertices,
 			unsigned int& vertexCount,
 			std::vector<std::array<unsigned int, 3>>& triangles,
 			unsigned int& triangleCount
@@ -43,6 +43,10 @@ namespace test {
 		glm::mat4 m_Model;
 		glm::mat4 m_View;
 		glm::mat4 m_Projection;
+
+		glm::vec3 m_Move;
+		glm::vec3 m_Rotate;
+		float m_Scale;
 
 		Renderer m_Renderer;
 	};
