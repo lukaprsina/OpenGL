@@ -9,6 +9,7 @@
 #include "tests/Test.h"
 #include "tests/TestClearColor.h"
 #include "tests/TestTexture2D.h"
+#include "tests/TestModel3D.h"
 
 void WindowResized(GLFWwindow* window, int width, int height)
 {
@@ -65,6 +66,7 @@ int main(void)
 
         testMenu->RegisterTest<test::TestClearColor>("Clear Color");
         testMenu->RegisterTest<test::TestTexture2D>("2D Texture");
+        testMenu->RegisterTest<test::TestModel3D>("3D Model");
 
         Renderer renderer;
 

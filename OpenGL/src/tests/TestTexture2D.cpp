@@ -1,5 +1,4 @@
 #include "TestTexture2D.h"
-#include "Renderer.h"
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "imgui/imgui.h"
@@ -23,6 +22,7 @@ namespace test {
             2, 3, 0
         };
 
+        GLCall(glDisable(GL_DEPTH_TEST));
         GLCall(glEnable(GL_BLEND));
         GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
 
@@ -53,8 +53,6 @@ namespace test {
 
 	void TestTexture2D::OnRender()
 	{
-        Renderer renderer;
-
         m_Texture->Bind();
 
         {
@@ -62,7 +60,7 @@ namespace test {
             glm::mat4 mvp = m_Proj * m_View * model;
             m_Shader->SetUniformMat4f("u_MVP", mvp);
 
-            renderer.Draw(*m_VAO, *m_IBO, *m_Shader);
+            m_Renderer.Draw(*m_VAO, *m_IBO, *m_Shader);
 
         }
 
@@ -72,7 +70,7 @@ namespace test {
             m_Shader->Bind();
             m_Shader->SetUniformMat4f("u_MVP", mvp);
 
-            renderer.Draw(*m_VAO, *m_IBO, *m_Shader);
+            m_Renderer.Draw(*m_VAO, *m_IBO, *m_Shader);
         }
 	}
 

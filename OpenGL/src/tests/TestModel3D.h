@@ -1,27 +1,37 @@
 #pragma once
 
-#include "Test.h"
 #include <memory>
+#include <array>
+#include "glm/gtc/matrix_transform.hpp"
+
+#include "Test.h"
 #include "VertexArray.h"
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
 #include "Shader.h"
-#include "Texture.h"
 #include "Renderer.h"
 
 namespace test {
 
-	class TestTexture2D : public Test
+	class TestModel3D : public Test
 	{
 	public:
-		TestTexture2D(const char* name);
-		~TestTexture2D();
+		TestModel3D(const char* name);
+		~TestModel3D();
+
+		bool LoadFromObjectFile(
+			const char* filename,
+			std::vector<double>& vertices,
+			unsigned int& vertexCount,
+			std::vector<std::array<unsigned int, 3>>& triangles,
+			unsigned int& triangleCount
+		);
 
 		inline const char* GetName() { return m_Name; };
 
 		void OnUpdate(float deltaTime) override;
 		void OnRender() override;
-		void OnImGuiRender() override;
+		void OnImGuiRender() override;		
 
 	private:
 		const char* m_Name;
@@ -29,10 +39,10 @@ namespace test {
 		std::unique_ptr<IndexBuffer> m_IBO;
 		std::unique_ptr<VertexBuffer> m_VBO;
 		std::unique_ptr<Shader> m_Shader;
-		std::unique_ptr<Texture> m_Texture;
 
-		glm::mat4 m_Proj, m_View;
-		glm::vec3 m_TranslationA, m_TranslationB;
+		glm::mat4 m_Model;
+		glm::mat4 m_View;
+		glm::mat4 m_Projection;
 
 		Renderer m_Renderer;
 	};
