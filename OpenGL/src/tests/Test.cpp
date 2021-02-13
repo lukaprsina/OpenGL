@@ -17,8 +17,8 @@ namespace test {
 
 	void TestMenu::OnImGuiRender()
 	{
-		GLCall(glClearColor(0, 0, 0, 1));
-		GLCall(glClear(GL_COLOR_BUFFER_BIT));
+		glClearColor(0, 0, 0, 1);
+		glClear(GL_COLOR_BUFFER_BIT);
 
 		for (auto& test : m_Tests)
 		{

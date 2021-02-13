@@ -22,9 +22,9 @@ namespace test {
             2, 3, 0
         };
 
-        GLCall(glDisable(GL_DEPTH_TEST));
-        GLCall(glEnable(GL_BLEND));
-        GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+        glDisable(GL_DEPTH_TEST);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         m_VAO = std::make_unique<VertexArray>();
 

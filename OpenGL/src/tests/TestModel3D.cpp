@@ -11,49 +11,39 @@
 
 namespace test {
 	TestModel3D::TestModel3D(const char* name)
-		: m_Name(name), m_Move(0.0f,0.0f,-100.0f), m_Scale(10.0f)
+		: m_Name(name), m_Move(0.0f, 0.0f, -100.0f), m_Scale(5.0f)
 	{
 		std::vector<std::array<float, 3>> vertices;
 		std::vector<std::array<unsigned int, 3>> triangles;
 
-		GLCall(glEnable(GL_DEPTH_TEST));
-		GLCall(glEnable(GL_BLEND));
-		GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+		glEnable(GL_DEPTH_TEST);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-		unsigned int vertexCount, triangleCount;		
-
-		bool loadedOBJ = LoadFromObjectFile("res/models/axis.obj", vertices, vertexCount,
-			triangles, triangleCount);
-
-		if (!loadedOBJ)
-		{
-			std::cout << "CANNOT LOAD THE OBJECT!\n";
-		}
+		objFile mesh = LoadFromOBJ("res/models/ico.obj");
 
 		m_VAO = std::make_unique<VertexArray>();
 
 		int vertexSize = sizeof(std::array<float, 3>);
 
-		m_VBO = std::make_unique<VertexBuffer>(&vertices[0][0],
-			vertexCount * vertexSize);
+		m_VBO = std::make_unique<VertexBuffer>(&mesh.vertices[0][0],
+			mesh.vertices.size() * vertexSize);
 
 		VertexBufferLayout layout;
 		layout.Push<float>(3);
 
 		m_VAO->AddBuffer(*m_VBO, layout);
 
-		int triangleSize = sizeof(std::array<unsigned int, 3>);
-
-		m_IBO = std::make_unique<IndexBuffer>(&triangles[0][0],
-			triangleCount * triangleSize);
+		m_IBO = std::make_unique<IndexBuffer>(&mesh.triangles[0][0],			
+			mesh.triangles.size() * 3);
 
 		m_Shader = std::make_unique<Shader>("res/shaders/Model3D.shader");
-		m_Shader->Bind();
+		m_Shader->Bind();		
 
 		float width = 1280.0f;
 		float height = 960.0f;
 
-		float fov = 45.0f;
+		float fov = 110.0f;
 		float zNear = 0.1f;
 		float zFar = 200.0f;
 		
@@ -65,20 +55,15 @@ namespace test {
 	}
 
 
-	bool TestModel3D::LoadFromObjectFile(
-		const char* filename,
-		std::vector<std::array<float, 3>>& vertices,
-		unsigned int& vertexCount,
-		std::vector<std::array<unsigned int, 3>>& triangles,
-		unsigned int& triangleCount
-	)
+	objFile TestModel3D::LoadFromOBJ(const char* filename)
 
 	{
 		FILE* filePointer;
 		errno_t err = fopen_s(&filePointer, filename, "r");
 
+		struct objFile model = { {}, {} };
 		if (err)
-			return false;
+			return model;
 
 		const int bufferLength = 255;
 		char buffer[bufferLength];
@@ -89,9 +74,6 @@ namespace test {
 
 			std::array<float, 3> vertex{ 0, 0, 0 };
 			std::array<unsigned int, 3> triangle{ 0, 0, 0 };
-
-			vertexCount = 0;
-			triangleCount = 0;
 
 			while (fgets(buffer, bufferLength, filePointer)) {
 
@@ -106,9 +88,8 @@ namespace test {
 						vertex[i] = coord;
 						token = strtok_s(NULL, " ", &next_token);
 					}
-					vertexCount++;
 					
-					vertices.push_back(vertex);
+					model.vertices.push_back(vertex);
 					break;
 
 				case 'f':
@@ -118,9 +99,8 @@ namespace test {
 						triangle[i] = index - 1;
 						token = strtok_s(NULL, " ", &next_token);
 					}
-					triangleCount++;
 					
-					triangles.push_back(triangle);
+					model.triangles.push_back(triangle);
 					break;
 				}				
 			}			
@@ -128,7 +108,7 @@ namespace test {
 			fclose(filePointer);
 
 		}
-		return true;
+		return model;
 	}
 
 	void TestModel3D::OnUpdate(float deltaTime)
@@ -138,7 +118,7 @@ namespace test {
 
 	void TestModel3D::OnRender()
 	{		
-		GLCall(glClear(GL_DEPTH_BUFFER_BIT));
+		glClear(GL_DEPTH_BUFFER_BIT);
 
 		glm::mat4 trans(1.0f);
 		trans = glm::scale(trans, glm::vec3(m_Scale, m_Scale, m_Scale));
@@ -159,6 +139,6 @@ namespace test {
 	{
 		ImGui::SliderFloat3("Move", &m_Move.x, -100.0f, 100.0f);
 		ImGui::SliderFloat3("Rotate", &m_Rotate.x, 0.00f, 360.0f);
-		ImGui::SliderFloat("Scale", &m_Scale, -100.00f, 100.0f);
+		ImGui::SliderFloat("Scale", &m_Scale, 0.01f, 50.0f);
 	}
 }

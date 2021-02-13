@@ -11,6 +11,12 @@
 #include "Shader.h"
 #include "Renderer.h"
 
+struct objFile
+{
+	std::vector<std::array<float, 3>> vertices;
+	std::vector<std::array<unsigned int, 3>> triangles;
+};
+
 namespace test {
 
 	class TestModel3D : public Test
@@ -19,13 +25,7 @@ namespace test {
 		TestModel3D(const char* name);
 		~TestModel3D();
 
-		bool LoadFromObjectFile(
-			const char* filename,
-			std::vector<std::array<float, 3>>& vertices,
-			unsigned int& vertexCount,
-			std::vector<std::array<unsigned int, 3>>& triangles,
-			unsigned int& triangleCount
-		);
+		objFile LoadFromOBJ(const char* filename);
 
 		inline const char* GetName() { return m_Name; };
 
